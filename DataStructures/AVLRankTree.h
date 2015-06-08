@@ -48,6 +48,7 @@ private:
 	// functions
 	void RemoveNode(Node* node);
 	void updateHeights(Node* node);
+	void updateRanks(Node* node);
 	void updateSmallest();
 	void balance(Node* node);
 	void llRotation(Node* node);
@@ -132,6 +133,7 @@ void AVLRankTree<K, T>::Insert(K key, T data) {
 	// Create the node
 	Node* new_node = new Node();
 	new_node->height = 1; // height of the subtree with this node as root.
+	new_node->rank = 1;
 	new_node->left = NULL;
 	new_node->right = NULL;
 	new_node->parent = NULL;
@@ -167,6 +169,7 @@ void AVLRankTree<K, T>::Insert(K key, T data) {
 		/////////////////////////////////////////////////////
 
 		updateHeights(new_node);
+		updateRanks(new_node);
 		this->balance(new_node);
 
 		this->size++;
@@ -231,6 +234,7 @@ void AVLRankTree<K, T>::RemoveNode(Node* node) {
 		ParentPointTo(node, NULL);
 		if (node->parent) {
 			updateHeights(node->parent);
+			updateRanks(node->parent);
 			this->balance(node->parent);
 		} else {
 			this->smallest = NULL;
@@ -246,6 +250,7 @@ void AVLRankTree<K, T>::RemoveNode(Node* node) {
 
 		if (node->parent) {
 			updateHeights(node->parent);
+			updateRanks(node->parent);
 			this->balance(node->parent);
 		} else {
 			updateSmallest();
@@ -262,6 +267,7 @@ void AVLRankTree<K, T>::RemoveNode(Node* node) {
 
 		if (node->parent) {
 			updateHeights(node->parent);
+			updateRanks(node->parent);
 			this->balance(node->parent);
 		} else {
 			updateSmallest();
@@ -305,6 +311,23 @@ void AVLRankTree<K, T>::updateHeights(Node* node) {
 		}
 		current->height =
 				((leftHeight > rightHeight) ? leftHeight : rightHeight) + 1;
+		current = current->parent;
+	}
+}
+
+// Updating the height property of the node and his ancestors. // TODO
+template<class K, class T>
+void AVLRankTree<K, T>::updateRanks(Node* node) {
+	Node* current = node;
+	while (current != NULL) {
+		int leftRank = 0, rightRank = 0;
+		if (current->left) {
+			leftRank = current->left->rank;
+		}
+		if (current->right) {
+			rightRank = current->right->rank;
+		}
+		current->rank = leftRank + rightRank + 1;
 		current = current->parent;
 	}
 }
@@ -370,6 +393,7 @@ void AVLRankTree<K, T>::llRotation(Node* node) {
 		lrChild->parent = node;
 
 	updateHeights(node);
+	updateRanks(node);
 }
 
 // node: the node with the |balance|>=2
@@ -392,6 +416,7 @@ void AVLRankTree<K, T>::rrRotation(Node* node) {
 		rlChild->parent = node;
 
 	updateHeights(node);
+	updateRanks(node);
 }
 
 // node: the node with the |balance|>=2
@@ -452,7 +477,7 @@ void AVLRankTree<K, T>::print2(Node* nodeToPrint, int level) {
 		}
 		//cout << nodeToPrint->key;
 		//cout << nodeToPrint->data;
-		cout << nodeToPrint->height;
+		cout << nodeToPrint->rank;
 		//cout << nodeToPrint->getBalance();
 
 		print2(nodeToPrint->left, level + 1);
