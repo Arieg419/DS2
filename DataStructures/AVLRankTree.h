@@ -78,7 +78,7 @@ public:
 	void print();
 };
 
-/********************************* Public Functions ******************************/
+/********************************* Public Functions *******************************/
 
 template<class K, class T>
 AVLRankTree<K, T>::AVLRankTree() {
