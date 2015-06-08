@@ -23,6 +23,7 @@ private:
 		K key;
 		T data;
 		int height;
+		int rank;
 		Node* left;
 		Node* right;
 		Node* parent;
