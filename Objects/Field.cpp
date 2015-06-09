@@ -7,8 +7,7 @@
 
 #include "Field.h"
 
-Field::Field() {
-	// TODO Auto-generated constructor stub
+Field::Field(int n) : groupsDepartments(n, NULL){
 
 }
 
@@ -16,30 +15,37 @@ Field::~Field() {
 	// TODO Auto-generated destructor stub
 }
 
-void Field::AddSuperhero(Superhero superhero, int strength) {
-
+void Field::AddSuperhero(int superhero, int strength) {
+	Superhero *newGuy = new Superhero(superhero, strength,-1);
+	this->superheroesPowerTree.Insert(PairID(strength,superhero), newGuy);
+	this->superheroesIdTree.Insert(superhero, newGuy);
 }
 
 void Field::AssignSuperhero(int superheroID, int team) {
-
+	Superhero *retVal = superheroesIdTree.getByKey(superheroID);
+	retVal->setGroup(team);
+	this->superheroesHashTable.Insert(superheroID,retVal);
+	//TODO need to check if strongest superhero was changed.0
 }
 
 void Field::JoinDepartments(int team1, int team2) {
-
+	//TODO
 }
 
-int Field::GetDepartment(int superheroID, int* department) {
-
+int Field::GetDepartment(int superheroID) {
+	Superhero *retVal = superheroesIdTree.getByKey(superheroID);
+	return groupsDepartments.Find(retVal->getGroup());
 }
 
 void Field::TeamUpgrade(int teamID, int factor) {
-
+	//TODO
 }
 
 Superhero* Field::GetStrongestSuperhero(int depID) {
-
+	return groupsDepartments.GetData(depID);
 }
 
 int Field::GetNumOfSuperherosInRange(int min, int max) {
-
+	//TODO
+	return -1;
 }
