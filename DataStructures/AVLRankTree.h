@@ -315,7 +315,7 @@ void AVLRankTree<K, T>::updateHeights(Node* node) {
 	}
 }
 
-// Updating the height property of the node and his ancestors. // TODO
+// Updating the height property of the node and his ancestors.
 template<class K, class T>
 void AVLRankTree<K, T>::updateRanks(Node* node) {
 	Node* current = node;

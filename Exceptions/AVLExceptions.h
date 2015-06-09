@@ -4,12 +4,13 @@
  *  Created on: May 11, 2015
  *      Author: dor
  */
-#include <iostream>
-#include <exception>
-using namespace std;
 
 #ifndef AVLEXCEPTIONS_H_
 #define AVLEXCEPTIONS_H_
+
+#include <iostream>
+#include <exception>
+using namespace std;
 
 /*class OutOfMemory:public exception {
 public:
