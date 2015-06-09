@@ -6,13 +6,31 @@
  */
 
 #include "Superhero.h"
+#include "../Exceptions/SuperheroExceptions.h"
 
-Superhero::Superhero() {
-	// TODO Auto-generated constructor stub
+Superhero::Superhero(int id, int strength, int group) {
+	this->id = id;
+	this->strength = strength;
+	this->group = -1;
+}
 
+int Superhero::getId() {
+	return this->id;
+}
+int Superhero::getStrength() {
+	return this->strength;
+}
+int Superhero::getGroup() {
+	return this->group;
+}
+void Superhero::setStrength(int strength) {
+	if (strength<0) throw IllegalStrength();
+	this->strength = strength;
+}
+void Superhero::setGroup(int group) {
+	this->group = group;
 }
 
 Superhero::~Superhero() {
-	// TODO Auto-generated destructor stub
+	// Auto is good enough
 }
-

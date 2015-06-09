@@ -12,13 +12,6 @@
 #include <exception>
 using namespace std;
 
-/*class OutOfMemory:public exception {
-public:
-	const char* what() {
-		return "I do not have the necessary resources for this allocation\n";
-	}
-};*/
-
 class KeyAlreadyExist:public exception {
 public:
 	const char* what() {

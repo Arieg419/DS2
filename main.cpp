@@ -8,15 +8,17 @@
 #include <iostream>
 #include "DataStructures/AVLRankTree.h"
 #include "DataStructures/UnionFind.h"
+#include "DataStructures/HashTable.h"
 
 //#include "Objects/Fruit.h"
 using namespace std;
 
 void TreeInterface();
 void UnionInterface();
+void HashTableInterface();
 
-int main(int argc, const char**argv) {
-	UnionInterface();
+int main(int argc, const char** argv) {
+	HashTableInterface();
 	return 0;
 }
 
@@ -73,7 +75,9 @@ void TreeInterface() {
 		default:
 			cout << "Wrong Choice" << endl;
 		}
-		cout << endl << "-------------------------------------------------------" << endl;
+		cout << endl
+				<< "-------------------------------------------------------"
+				<< endl;
 	}
 }
 
@@ -86,7 +90,7 @@ void UnionInterface() {
 	cin >> n;
 
 	cout << "#######################################################" << endl;
-	UnionFind<int> uf(n,0);
+	UnionFind<int> uf(n, 0);
 	while (1) {
 
 		cout << "1. Union";
@@ -133,6 +137,58 @@ void UnionInterface() {
 		default:
 			cout << "Wrong Choice" << endl;
 		}
-		cout << endl << "-------------------------------------------------------" << endl;
+		cout << endl
+				<< "-------------------------------------------------------"
+				<< endl;
+	}
+}
+
+void HashTableInterface() {
+	cout << "Good morning Sir. You may create your UnionFind DS now." << endl;
+	cout << "#######################################################" << endl;
+
+	HashTable<int> hashingTable;
+	int key, val;
+	int userVal = 1;
+	while (userVal != 0) {
+		cout << "1. Insert";
+		cout << "\t\t2. Find" << endl;
+		cout << "3. Delete";
+		cout << "\t\t9. Exit" << endl;
+		cout << "Enter your choice: ";
+		cin >> userVal;
+
+		switch (userVal) {
+		case 1:
+			cout << "Enter element to be inserted: ";
+			cin >> val;
+			cout << "Enter key at which element to be inserted: ";
+			cin >> key;
+			hashingTable.Insert(key, val);
+			break;
+		case 2:
+			cout << "Enter key of the element to be searched: ";
+			cin >> key;
+			try {
+				cout << "Element at key " << key << " : " << hashingTable.Find(key) << endl;
+			} catch (...){
+				cout << "Key does not exist" << endl;
+			}
+			break;
+		case 3:
+			cout << "Enter key of the element to be deleted: ";
+			cin >> key;
+			cout
+					<< "Nothing can be deleted from this Hash Table Implementation."
+					<< endl;
+			break;
+		case 9:
+			exit(0);
+		default:
+			cout << "Wrong Choice" << endl;
+		}
+		cout << endl
+				<< "-------------------------------------------------------"
+				<< endl;
 	}
 }
