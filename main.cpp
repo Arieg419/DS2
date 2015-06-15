@@ -18,7 +18,7 @@ void UnionInterface();
 void HashTableInterface();
 
 int main(int argc, const char** argv) {
-	HashTableInterface();
+	UnionInterface();
 	return 0;
 }
 
@@ -90,7 +90,7 @@ void UnionInterface() {
 	cin >> n;
 
 	cout << "#######################################################" << endl;
-	UnionFind<int> uf(n, 0);
+	UnionFindSelectiveUnion<int> uf(n, 0);
 	while (1) {
 
 		cout << "1. Union";

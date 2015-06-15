@@ -65,6 +65,10 @@ void UnionFind<T>::Union(int i, int j) {
 	this->parents[smaller] = bigger;
 	// update size
 	this->size[bigger] += this->size[smaller];
+
+	// make sure i is the name of the department
+	if (bigger==i)
+		return;
 }
 
 template<class T>
