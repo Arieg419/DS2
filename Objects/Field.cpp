@@ -100,7 +100,7 @@ void Field::updateStrengthTree(int teamID, int factor) {
 		} else if (p2 == length) { // remain only to attack
 			copyP1 = true;
 		} else {
-			if (superheroes[p1]->getPairID() < superheroes[p2]->getPairID())
+			if (superheroes[p1]->getStrengthID() < superheroes[p2]->getStrengthID())
 				copyP1 = true;
 			else
 				copyP1 = false;
@@ -109,13 +109,13 @@ void Field::updateStrengthTree(int teamID, int factor) {
 		// deciding whether to copy p1 or p2
 		if (copyP1) {
 			updatedFruits[p3++] = superheroes[p1++];
-			while (p1 < length && !insect.ShouldAttack(fruits[p1])) // calculate next p1
+			while (p1 < length && superheroes[p1]->getGroup()!=teamID) // calculate next p1
 				p1++;
 			if (p1 < length)
-				insect.Attack(fruits[p1]);
+				superheroes[p1]->setStrength(superheroes[p1]->getStrength()*factor);
 		} else {
 			updatedFruits[p3++] = superheroes[p2++];
-			while (p2 < length && insect.ShouldAttack(fruits[p2])) // calculate next p2
+			while (p2 < length && superheroes[p2]->getGroup()==teamID) // calculate next p2
 				p2++;
 		}
 	}
@@ -125,7 +125,7 @@ void Field::updateStrengthTree(int teamID, int factor) {
 
 	// converting array to a tree
 	for (int i = 0; i < length; i++)
-		updatedKeys[i] = updatedFruits[i]->getPairID();
+		updatedKeys[i] = updatedFruits[i]->getStrengthID();
 
 	this->superheroesPowerTree.LoadSortedArray(updatedKeys, updatedFruits, length);
 }

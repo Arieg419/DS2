@@ -23,6 +23,11 @@ int Superhero::getStrength() {
 int Superhero::getGroup() {
 	return this->group;
 }
+
+PairID Superhero::getStrengthID(){
+	return PairID(this->getStrength(), this->getId());
+}
+
 void Superhero::setStrength(int strength) {
 	if (strength<0) throw IllegalStrength();
 	this->strength = strength;

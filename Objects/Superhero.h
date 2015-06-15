@@ -18,6 +18,7 @@ public:
 	int getId();
 	int getStrength();
 	int getGroup();
+	PairID getStrengthID();
 	void setStrength(int strength);
 	void setGroup(int group);
 	virtual ~Superhero();
