@@ -21,7 +21,7 @@ private:
 	HashTable<Superhero*> superheroesHashTable;
 	UnionFind<Superhero*> groupsDepartments;
 
-	void updateStrengthTree(int teamID, int factor);
+	int updateStrengthTree(int teamID, int factor);
 public:
 	Field(int n);
 	virtual ~Field();
