@@ -20,6 +20,10 @@ private:
 	AVLRankTree<PairID,Superhero*> superheroesPowerTree;
 	HashTable<Superhero*> superheroesHashTable;
 	UnionFind<Superhero*> groupsDepartments;
+	int minID = 0;
+	int maxID = 0;
+	bool hasBeenInit = false;
+
 public:
 	Field(int n);
 	virtual ~Field();

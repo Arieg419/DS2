@@ -63,6 +63,7 @@ private:
 	void destroy2(Node* node);
 	Node* LoadSortedArray2(K* sortedKeysArray, T* sortedArray, int length,
 			Node* parent);
+	Node* findClosestParentOf(K key);
 
 public:
 	AVLRankTree();
@@ -70,6 +71,7 @@ public:
 	void Reset();
 	void LoadSortedArray(K* sortedKeysArray, T* sortedDataArray, int length);
 	int GetSize();
+	int getInRange(K min, K max, int minID, int maxID);
 	void Insert(K key, T data);
 	void Remove(K key);
 	T getByKey(K key);
@@ -80,6 +82,63 @@ public:
 };
 
 /********************************* Public Functions *******************************/
+
+template<class K, class T>
+typename AVLRankTree<K, T>::Node* AVLRankTree<K,T>::findClosestParentOf(K key) {
+	Node* currentNode = root;
+		while ((currentNode != NULL) && (currentNode->key != key)) {
+			if (key < currentNode->key) { // left subtree
+				if(currentNode->left == NULL) { //that means we wont find the exact node we need
+					return currentNode;
+				}
+				else {
+				currentNode = currentNode->left;
+				}
+			}
+
+			if(currentNode->key > key) {
+				if(currentNode->right ==NULL) {  //that means we wont find the exact node we need
+					return currentNode;
+				}
+				else {
+					currentNode = currentNode->right;
+				}
+			}
+		}
+		return currentNode;
+}
+
+
+
+template<class K, class T>
+int AVLRankTree<K,T>::getInRange(K min, K max, int minID, int maxID) {
+	int weakRank = 0;
+	int strongRank = 0;
+	Node* weakestHero = this->findClosestParentOf(min);
+	Node* strongestHero = this->findClosestParentOf(max);
+	Node* currNode = weakestHero;
+	Node* parentNode = currNode->parent;
+	while(currNode->parent != NULL) {
+		Node* tempNode = parentNode;
+		if (tempNode->left == currNode) { //I was left son
+			weakRank++;
+		}
+		currNode = parentNode;
+	}
+
+	currNode = strongestHero;
+	parentNode = currNode->parent;
+	while(currNode->parent != NULL) {
+		Node* tempNode = parentNode;
+				if (tempNode->right == currNode) { //I was right son
+					strongRank++;
+				}
+				currNode = parentNode;
+	}
+
+	int diff = strongRank - weakRank;
+	return diff;
+}
 
 template<class K, class T>
 AVLRankTree<K, T>::AVLRankTree() {

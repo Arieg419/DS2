@@ -25,7 +25,9 @@ int main(int argc, const char** argv) {
 void TreeInterface() {
 	cout << "Good morning Sir. You may create your AVLRankTree now." << endl;
 	cout << "######################################################" << endl;
-	int choice, item, ID, *arr;
+	int choice, item, ID, *arr, minRange, maxRange;
+	int fakeMinId = 0 ;
+	int fakeMaxId = 1000;
 
 	AVLRankTree<int, int> avl;
 	while (1) {
@@ -68,6 +70,15 @@ void TreeInterface() {
 		case 5:
 			cout << "minimin key is:" << endl;
 			cout << avl.getSmallest() << endl;
+			break;
+		case 6:
+			cout << "I can grab ranges. Please specify a min range for calculations" << endl;
+			cin >> minRange;
+			cout << "Please specify a max range for the calibration" << endl;
+			cin >> maxRange;
+			cout << "Great. Calibrating the relevant range as we speak" << endl;
+			int res = avl.getInRange(minRange, fakeMinId, maxRange, fakeMaxId);
+			cout << res;
 			break;
 		case 9:
 			exit(0);

@@ -17,6 +17,19 @@ Field::~Field() {
 }
 
 void Field::AddSuperhero(int superhero, int strength) {
+	if(!hasBeenInit) {
+		minID = superhero;
+		maxID = superhero;
+		hasBeenInit = true;
+	} else {
+		if(superhero < minID) {
+			minID = superhero;
+		}
+		if(superhero > maxID) {
+			maxID = superhero;
+		}
+	}
+	hasBeenInit = true;
 	Superhero *newGuy = new Superhero(superhero, strength, -1);
 	this->superheroesPowerTree.Insert(PairID(strength, superhero), newGuy);
 	this->superheroesIdTree.Insert(superhero, newGuy);
@@ -68,5 +81,17 @@ Superhero* Field::GetStrongestSuperhero(int depID) {
 
 int Field::GetNumOfSuperherosInRange(int min, int max) {
 //TODO
+	//function accesses getRange method of AVL Ranked Tree
+	//so we need to grab that DS(Obejct)
+	//Algorithm ############
+	//1. Get superheroesPower Tree. All heroes sorted in an AVL tree based on strength.
+	//2. Node rank is all of nodes children including itself.
+	//3. Get superhero with value equal to or closest to Minimum power level.
+	//4. Traverse the tree until you reach a superhero with the max interval val
+	//5. Get the height from the min node the max node.
+	//6. Deduct the nodes that are left to the minimum, look at his left childs ranks and subtract.
+	//Superhero* minSuperHero = this->superheroesPowerTree.getByKey(min);
+	//Superhero* maxSuperHero = this->superheroesPowerTree.getByKey(max);
+	//int diffInHeight = minSuperHero
 	return -1;
 }
