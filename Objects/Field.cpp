@@ -7,8 +7,7 @@
 
 #include "Field.h"
 
-Field::Field(int n) :
-		groupsDepartments(n, NULL) {
+Field::Field(int n) : groupsDepartments(n, NULL) {
 
 }
 
@@ -84,7 +83,7 @@ int Field::GetNumOfSuperherosInRange(int min, int max) {
 }
 
 /****************************** Private ***************************/
-int Field::updateStrengthTree(int teamID, int factor) {
+Superhero* Field::updateStrengthTree(int teamID, int factor) {
 	Superhero* strongest;
 	int length = this->superheroesPowerTree.GetSize();
 	if (length == 0)

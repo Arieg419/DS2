@@ -9,6 +9,7 @@
 #include "DataStructures/AVLRankTree.h"
 #include "DataStructures/UnionFind.h"
 #include "DataStructures/HashTable.h"
+#include "DataStructures/UnionFindSelectiveUnion.h"
 
 //#include "Objects/Fruit.h"
 using namespace std;

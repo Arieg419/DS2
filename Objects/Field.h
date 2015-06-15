@@ -12,16 +12,16 @@
 #include "../DataStructures/AVLRankTree.h"
 #include "../DataStructures/HashTable.h"
 #include "../DataStructures/PairID.h"
-#include "../DataStructures/UnionFind.h"
+#include "../DataStructures/UnionFindSelectiveUnion.h"
 
 class Field {
 private:
 	AVLRankTree<int,Superhero*> superheroesIdTree;
 	AVLRankTree<PairID,Superhero*> superheroesPowerTree;
 	HashTable<Superhero*> superheroesHashTable;
-	UnionFind<Superhero*> groupsDepartments;
+	UnionFindSelectiveUnion<Superhero*> groupsDepartments;
 
-	int updateStrengthTree(int teamID, int factor);
+	Superhero* updateStrengthTree(int teamID, int factor);
 public:
 	Field(int n);
 	virtual ~Field();

@@ -8,6 +8,8 @@
 #ifndef OBJECTS_SUPERHERO_H_
 #define OBJECTS_SUPERHERO_H_
 
+#include "../DataStructures/PairID.h"
+
 class Superhero {
 private:
 	int id;

@@ -12,13 +12,13 @@
 
 template<class T>
 class UnionFindSelectiveUnion : public UnionFind<T> {
-
+private:
 	int* Real2Fake;
 	int* Fake2Real;
 
+public:
 	UnionFindSelectiveUnion(int n, T defaultData);
 	virtual ~UnionFindSelectiveUnion();
-
 	void Union(int i, int j);
 	int Find(int i);
 	void SetData(int i, T data);
@@ -27,7 +27,7 @@ class UnionFindSelectiveUnion : public UnionFind<T> {
 };
 
 template<class T>
-UnionFindSelectiveUnion<T>::UnionFindSelectiveUnion(int n, T defaultData){
+UnionFindSelectiveUnion<T>::UnionFindSelectiveUnion(int n, T defaultData) : UnionFind<T>(n, defaultData){
 	Fake2Real = new int[n];
 	Real2Fake = new int[n];
 	for (int i=0; i<n; i++){
@@ -59,7 +59,7 @@ int UnionFindSelectiveUnion<T>::Find(int i){
 
 template<class T>
 void UnionFindSelectiveUnion<T>::SetData(int i, T data){
-	UnionFind<T>::SetData(Real2Fake[i],T);
+	UnionFind<T>::SetData(Real2Fake[i],data);
 }
 
 template<class T>
