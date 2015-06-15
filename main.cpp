@@ -19,14 +19,14 @@ void UnionInterface();
 void HashTableInterface();
 
 int main(int argc, const char** argv) {
-	UnionInterface();
+	TreeInterface();
 	return 0;
 }
 
 void TreeInterface() {
 	cout << "Good morning Sir. You may create your AVLRankTree now." << endl;
 	cout << "######################################################" << endl;
-	int choice, item, ID, *arr;
+	int choice, item, ID, *arr, min, max;;
 
 	AVLRankTree<int, int> avl;
 	while (1) {
@@ -35,7 +35,8 @@ void TreeInterface() {
 		cout << "3. Display";
 		cout << "\t\t4. Generate array" << endl;
 		cout << "5. Get leftest";
-		cout << "\t\t9. Exit" << endl << endl;
+		cout << "\t\t6. GetRange" << endl;
+		cout << "9. Exit" << endl << endl;
 		cout << "Enter your Choice: ";
 		cin >> choice;
 		switch (choice) {
@@ -69,6 +70,14 @@ void TreeInterface() {
 		case 5:
 			cout << "minimin key is:" << endl;
 			cout << avl.getSmallest() << endl;
+			break;
+		case 6:
+			cout << "Enter min: ";
+			cin >> min;
+			cout << "Enter max: ";
+			cin >> max;
+			cout << "Amout of elements in range: ";
+			cout << avl.getInRange(min,max) << endl;
 			break;
 		case 9:
 			exit(0);
@@ -171,8 +180,9 @@ void HashTableInterface() {
 			cout << "Enter key of the element to be searched: ";
 			cin >> key;
 			try {
-				cout << "Element at key " << key << " : " << hashingTable.Find(key) << endl;
-			} catch (...){
+				cout << "Element at key " << key << " : "
+						<< hashingTable.Find(key) << endl;
+			} catch (...) {
 				cout << "Key does not exist" << endl;
 			}
 			break;

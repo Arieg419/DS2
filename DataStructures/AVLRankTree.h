@@ -94,14 +94,14 @@ typename AVLRankTree<K, T>::Node* AVLRankTree<K, T>::findClosestParentOf(
 			} else {
 				currentNode = currentNode->left;
 			}
-		}
-
-		if (currentNode->key > key) {
+		} else if (key > currentNode->key) {
 			if (currentNode->right == NULL) { //that means we wont find the exact node we need
 				return currentNode;
 			} else {
 				currentNode = currentNode->right;
 			}
+		} else { // equal
+			return currentNode;
 		}
 	}
 	return currentNode;
@@ -115,7 +115,9 @@ int AVLRankTree<K, T>::getInRange(K min, K max) {
 
 	if (max <= min)
 		throw IllegalInput();
-	return findMyBitches(max) - findMyBitches(min)+1;
+	int range = findMyBitches(max) - findMyBitches(min);
+	if (DoesExist(min)) range++;
+	return range;
 	// TODO count edges
 
 //	Node* currNode = weakestHero;
@@ -548,9 +550,9 @@ void AVLRankTree<K, T>::print2(Node* nodeToPrint, int level) {
 		for (i = 0; i < level && nodeToPrint != root; i++) {
 			cout << "       ";
 		}
-		//cout << nodeToPrint->key;
+		cout << nodeToPrint->key;
 		//cout << nodeToPrint->data;
-		cout << nodeToPrint->rank;
+		//cout << nodeToPrint->rank;
 		//cout << nodeToPrint->getBalance();
 
 		print2(nodeToPrint->left, level + 1);
@@ -629,8 +631,8 @@ int AVLRankTree<K, T>::findMyBitches(K key) {
 		// do nothing
 		} else { // if current is right child of it's parent
 			smallerNodes += 1; // count parent node
-			if (current->left) // cont left childs
-				smallerNodes += current->left->rank;
+			if (parent->left) // cont left childs
+				smallerNodes += parent->left->rank;
 		}
 		current = parent;
 	}
