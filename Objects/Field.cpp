@@ -7,7 +7,8 @@
 
 #include "Field.h"
 
-Field::Field(int n) : groupsDepartments(n, NULL){
+Field::Field(int n) :
+		groupsDepartments(n, NULL) {
 
 }
 
@@ -16,20 +17,40 @@ Field::~Field() {
 }
 
 void Field::AddSuperhero(int superhero, int strength) {
-	Superhero *newGuy = new Superhero(superhero, strength,-1);
-	this->superheroesPowerTree.Insert(PairID(strength,superhero), newGuy);
+	Superhero *newGuy = new Superhero(superhero, strength, -1);
+	this->superheroesPowerTree.Insert(PairID(strength, superhero), newGuy);
 	this->superheroesIdTree.Insert(superhero, newGuy);
 }
 
 void Field::AssignSuperhero(int superheroID, int team) {
-	Superhero *retVal = superheroesIdTree.getByKey(superheroID);
-	retVal->setGroup(team);
-	this->superheroesHashTable.Insert(superheroID,retVal);
-	//TODO need to check if strongest superhero was changed.0
+	Superhero *superhero = superheroesIdTree.getByKey(superheroID);
+	superhero->setGroup(team);
+	this->superheroesHashTable.Insert(superheroID, superhero);
+	// update strongest
+	int department = groupsDepartments.Find(team);
+	Superhero* old_strongest = groupsDepartments.GetData(department);
+	if (superhero->getStrength() > old_strongest->getStrength()) {
+		groupsDepartments.SetData(department, superhero);
+	} else if (superhero->getStrength() == old_strongest->getStrength()) {
+		if (superhero->getId() < old_strongest->getId())
+			groupsDepartments.SetData(department, superhero);
+	}
 }
 
 void Field::JoinDepartments(int team1, int team2) {
-	//TODO
+	Superhero* strongest1 = groupsDepartments.GetData(team1);
+	Superhero* strongest2 = groupsDepartments.GetData(team2);
+
+	groupsDepartments.Union(team1, team2);
+	// TODO: Make "team1" the name of the deparment. unless it will happen, the following part will fail!
+	// READ the upper row !!!!!!!!!!!!!!!!!!!!!
+	groupsDepartments.SetData(team1,strongest1);
+	if (strongest2->getStrength() > strongest1->getStrength()) {
+		groupsDepartments.SetData(team1, strongest2);
+	} else if (strongest1->getStrength() == strongest2->getStrength()) {
+		if (strongest2->getId() < strongest1->getId())
+			groupsDepartments.SetData(team1, strongest2);
+	}
 }
 
 int Field::GetDepartment(int superheroID) {
@@ -38,7 +59,7 @@ int Field::GetDepartment(int superheroID) {
 }
 
 void Field::TeamUpgrade(int teamID, int factor) {
-	//TODO
+//TODO
 }
 
 Superhero* Field::GetStrongestSuperhero(int depID) {
@@ -46,6 +67,6 @@ Superhero* Field::GetStrongestSuperhero(int depID) {
 }
 
 int Field::GetNumOfSuperherosInRange(int min, int max) {
-	//TODO
+//TODO
 	return -1;
 }
