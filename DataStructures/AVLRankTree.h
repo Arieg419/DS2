@@ -63,13 +63,15 @@ private:
 	void destroy2(Node* node);
 	Node* LoadSortedArray2(K* sortedKeysArray, T* sortedArray, int length,
 			Node* parent);
-
+	Node* findClosestParentOf(K key);
+	int findMyBitches(K key);
 public:
 	AVLRankTree();
 	virtual ~AVLRankTree();
 	void Reset();
 	void LoadSortedArray(K* sortedKeysArray, T* sortedDataArray, int length);
 	int GetSize();
+	int getInRange(K min, K max);
 	void Insert(K key, T data);
 	void Remove(K key);
 	T getByKey(K key);
@@ -80,6 +82,77 @@ public:
 };
 
 /********************************* Public Functions *******************************/
+
+template<class K, class T>
+typename AVLRankTree<K, T>::Node* AVLRankTree<K, T>::findClosestParentOf(
+		K key) {
+	Node* currentNode = root;
+	while ((currentNode != NULL) && (currentNode->key != key)) {
+		if (key < currentNode->key) { // left subtree
+			if (currentNode->left == NULL) { //that means we wont find the exact node we need
+				return currentNode;
+			} else {
+				currentNode = currentNode->left;
+			}
+		}
+
+		if (currentNode->key > key) {
+			if (currentNode->right == NULL) { //that means we wont find the exact node we need
+				return currentNode;
+			} else {
+				currentNode = currentNode->right;
+			}
+		}
+	}
+	return currentNode;
+}
+
+template<class K, class T>
+int AVLRankTree<K, T>::getInRange(K min, K max) {
+
+//	int weakRank = 0;
+//	int strongRank = 0;
+
+	if (max <= min)
+		throw IllegalInput();
+	return findMyBitches(max) - findMyBitches(min)+1;
+	// TODO count edges
+
+//	Node* currNode = weakestHero;
+//	Node* parentNode;
+//	while (currNode->parent != NULL) {
+//		parentNode = currNode->parent;
+//		if (parentNode->left == currNode) { //I was left son
+//			weakRank = currNode->rank + 1;
+//		}
+//		currNode = parentNode;
+//	}
+//
+//	currNode = strongestHero;
+//	parentNode = currNode->parent;
+//	while (currNode->parent != NULL) {
+//		parentNode = currNode->parent;
+//		if (parentNode->right == currNode) { //I was right son
+//			strongRank =
+//			//strongRank += currNode->left.rank;
+//		}
+//		currNode = parentNode;
+//	}
+
+	//int weakRankKids = 0;
+	//int strongRankKids = 0 ;
+
+	//while(weakestHero->parent != NULL) {
+	//weakRankKids += weakestHero->left.rank;
+	//}
+
+	//while(strongestHero->parent != NULL) {
+	//	strongRankKids += strongestHero->left.rank;
+	//}
+
+//	int diff = strongRank - weakRank;
+//	return diff;
+}
 
 template<class K, class T>
 AVLRankTree<K, T>::AVLRankTree() {
@@ -533,6 +606,35 @@ typename AVLRankTree<K, T>::Node* AVLRankTree<K, T>::LoadSortedArray2(
 						node->left->height : node->right->height; // both children exist
 
 	return node;
+}
+
+template<class K, class T>
+int AVLRankTree<K, T>::findMyBitches(K key) {
+	int smallerNodes = 0;
+	Node* current = this->findClosestParentOf(key);
+	if (current == NULL) {
+		return 0;
+	}
+
+	// first iteration
+	if (current->key < key || current->key == key) { //this is the edge case of not finding the exact node.
+		smallerNodes += 1; // count parent node
+		if (current->left) // cont left childs
+			smallerNodes += current->left->rank;
+	}
+
+	while (current != root) {
+		Node* parent = current->parent;
+		if (parent->left && parent->left->key == current->key) { // if current is left child of it's parent
+		// do nothing
+		} else { // if current is right child of it's parent
+			smallerNodes += 1; // count parent node
+			if (current->left) // cont left childs
+				smallerNodes += current->left->rank;
+		}
+		current = parent;
+	}
+	return smallerNodes;
 }
 
 #endif /* AVLRankTree_H_ */

@@ -16,10 +16,13 @@
 
 class Field {
 private:
-	AVLRankTree<int,Superhero*> superheroesIdTree;
-	AVLRankTree<PairID,Superhero*> superheroesPowerTree;
+	AVLRankTree<int, Superhero*> superheroesIdTree;
+	AVLRankTree<PairID, Superhero*> superheroesPowerTree;
 	HashTable<Superhero*> superheroesHashTable;
 	UnionFindSelectiveUnion<Superhero*> groupsDepartments;
+	int minID = 0;
+	int maxID = 0;
+	bool hasBeenInit = false;
 
 	Superhero* updateStrengthTree(int teamID, int factor);
 public:
@@ -33,6 +36,5 @@ public:
 	Superhero* GetStrongestSuperhero(int depID);
 	int GetNumOfSuperherosInRange(int min, int max);
 };
-
 
 #endif /* OBJECTS_FIELD_H_ */
