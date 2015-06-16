@@ -87,6 +87,7 @@ void Field::JoinDepartments(int team1, int team2) {
 	Superhero* strongest2 = groupsDepartments.GetData(dep2);
 
 	groupsDepartments.Union(dep1, dep2);
+	//int new_dep = groupsDepartments.Find(dep1); // TO TRY
 
 	if (!strongest1 && !strongest2) // both dep doesn't have superheroes
 		return;
@@ -142,13 +143,6 @@ void Field::TeamUpgrade(int teamID, int factor) {
 }
 
 Superhero* Field::GetStrongestSuperhero(int depID) {
-	//################### TODO remove(debugging)
-	if (depID == 23) {
-		int groupa = superheroesIdTree.getByKey(1917)->getGroup();
-		int depa = groupsDepartments.Find(groupa);
-		depa++;
-	}
-//###################
 	if (depID < 0 || depID >= fieldSize)
 		throw FieldInvalidInput();
 	if (groupsDepartments.Find(depID) != depID)

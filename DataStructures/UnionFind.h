@@ -15,7 +15,6 @@ class UnionFind {
 private:
 	int* parents; // Main array that represent the items.
 	int* size; // used to determine which set to merge into the other(during union)
-	T* data; // hold items data.
 protected:
 	int max_size;
 public:
@@ -24,8 +23,6 @@ public:
 
 	void Union(int i, int j);
 	int Find(int i);
-	void SetData(int i, T data);
-	T GetData(int i);
 
 	void Print();
 };
@@ -35,12 +32,10 @@ UnionFind<T>::UnionFind(int n, T defaultData) {
 	this->max_size = n;
 	this->parents = new int[n];
 	this->size = new int[n];
-	this->data = new T[n];
 
 	for (int i = 0; i < n; i++) {
 		this->parents[i] = -1; // (-1) represent root(set head)
 		this->size[i] = 1;
-		this->data[i] = defaultData;
 	}
 }
 
@@ -48,7 +43,6 @@ template<class T>
 UnionFind<T>::~UnionFind() {
 	delete[] parents;
 	delete[] size;
-	delete[] data;
 }
 
 template<class T>
@@ -94,28 +88,6 @@ int UnionFind<T>::Find(int i) {
 	}
 
 	return root;
-}
-
-template<class T>
-void UnionFind<T>::SetData(int i, T data) {
-	// check if legal set
-	if (i < 0 || i >= max_size)
-		throw SetDoesNotExist();
-	if (this->parents[i] != -1)
-		throw SetDoesNotExist();
-
-	this->data[i] = data;
-}
-
-template<class T>
-T UnionFind<T>::GetData(int i) {
-	// check if legal set
-	if (i < 0 || i >= max_size)
-		throw SetDoesNotExist();
-	if (this->parents[i] != -1)
-		throw SetDoesNotExist();
-
-	return this->data[i];
 }
 
 template<class T>

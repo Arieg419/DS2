@@ -17,7 +17,7 @@ private:
 //	int* Real2Fake;
 //	int* Fake2Real;
 	InjectiveDictionary dict; // key is the set, and data is the item
-
+	T* data; // hold items data.
 public:
 	UnionFindSelectiveUnion(int n, T defaultData);
 	virtual ~UnionFindSelectiveUnion();
@@ -31,18 +31,15 @@ public:
 template<class T>
 UnionFindSelectiveUnion<T>::UnionFindSelectiveUnion(int n, T defaultData) :
 		UnionFind<T>(n, defaultData), dict(n) {
-	/*Fake2Real = new int[n];
-	Real2Fake = new int[n];
+	this->data = new T[n];
 	for (int i = 0; i < n; i++) {
-		Real2Fake[i] = i;
-		Fake2Real[i] = i;
-	}*/
+		data[i] = defaultData;
+	}
 }
 
 template<class T>
 UnionFindSelectiveUnion<T>::~UnionFindSelectiveUnion() {
-	/*delete[] Real2Fake;
-	delete[] Fake2Real;*/
+	delete[] data;
 }
 
 template<class T>
@@ -50,7 +47,7 @@ void UnionFindSelectiveUnion<T>::Union(int item1, int item2) {
 	dict.remove(Find(item1));
 	dict.remove(Find(item2));
 	UnionFind<T>::Union(item1, item2);
-	dict.set(item1,UnionFind<T>::Find(item1));
+	dict.set(item1, UnionFind<T>::Find(item1));
 }
 
 template<class T>
@@ -61,17 +58,28 @@ int UnionFindSelectiveUnion<T>::Find(int item) {
 
 template<class T>
 void UnionFindSelectiveUnion<T>::SetData(int set, T data) {
-	UnionFind<T>::SetData(dict.getData(set), data);
+	// check if legal set
+	if (set < 0 || set >= this->max_size)
+		throw SetDoesNotExist();
+	if (Find(set) != set)
+		throw SetDoesNotExist();
+
+	this->data[set] = data;
 }
 
 template<class T>
 T UnionFindSelectiveUnion<T>::GetData(int set) {
-	return UnionFind<T>::GetData(dict.getData(set));
+	// check if legal set
+	if (set < 0 || set >= this->max_size)
+		throw SetDoesNotExist();
+	if (Find(set) != set)
+		throw SetDoesNotExist();
+
+	return this->data[set];
 }
 
 template<class T>
 void UnionFindSelectiveUnion<T>::PrintReal() {
-	cout << endl << "##############" << endl << Find(20) << endl << "##############" << endl;
 	// for debugging pupose only. shitty complexity!
 	for (int i = 0; i < this->max_size; i++) {
 		bool printed = false;

@@ -1062,7 +1062,7 @@ JoinDepartments: Failure
 GetDepartment: Failure
 AddSuperhero: Success
 GetDepartment: Failure
-GetStrongestSuperhero: Success 578
+GetStrongestSuperhero: Success 554
 JoinDepartments: Failure
 AssignSuperhero: Success
 GetNumOfSuperherosInRange: Success 111

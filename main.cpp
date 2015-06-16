@@ -19,12 +19,12 @@ void TreeInterface();
 void UnionInterface();
 void HashTableInterface();
 
-/*
-int main(int argc, const char** argv) {
-	TreeInterface();
+
+/*int main(int argc, const char** argv) {
+	UnionInterface();
 	return 0;
-}
-*/
+}*/
+
 
 void TreeInterface() {
 	cout << "Good morning Sir. You may create your AVLRankTree now." << endl;

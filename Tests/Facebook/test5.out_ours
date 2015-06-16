@@ -125,7 +125,7 @@ GetStrongestSuperhero: Success 1267
 AssignSuperhero: Success
 JoinDepartments: Success
 AssignSuperhero: Success
-GetStrongestSuperhero: Success 200
+GetStrongestSuperhero: Success 1917
 JoinDepartments: Failure
 GetDepartment: Failure
 JoinDepartments: Failure
@@ -165,7 +165,7 @@ AssignSuperhero: Success
 GetStrongestSuperhero: Failure
 GetNumOfSuperherosInRange: Success 2
 AddSuperhero: Success
-GetStrongestSuperhero: Success 200
+GetStrongestSuperhero: Success 1917
 JoinDepartments: Failure
 AssignSuperhero: Success
 GetNumOfSuperherosInRange: Success 0
@@ -300,7 +300,7 @@ JoinDepartments: Failure
 GetDepartment: Failure
 GetDepartment: Failure
 AssignSuperhero: Success
-GetStrongestSuperhero: Success 200
+GetStrongestSuperhero: Success 1917
 AddSuperhero: Success
 JoinDepartments: Failure
 GetDepartment: Failure
