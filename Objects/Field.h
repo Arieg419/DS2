@@ -20,10 +20,10 @@ private:
 	AVLRankTree<PairID, Superhero*> superheroesPowerTree;
 	HashTable<Superhero*> superheroesHashTable;
 	UnionFindSelectiveUnion<Superhero*> groupsDepartments;
-	int minID = 0;
-	int maxID = 0;
-	bool hasBeenInit = false;
-	int fieldSize=0;
+	int minID;
+	int maxID;
+	bool hasBeenInit;
+	int fieldSize;
 
 	Superhero* updateStrengthTree(int teamID, int factor);
 public:

@@ -10,11 +10,18 @@
 
 Field::Field(int n) :
 		groupsDepartments(n, NULL) {
+	minID = 0;
+	maxID = 0;
+	hasBeenInit = false;
+	fieldSize = 0;
 	fieldSize = n;
 }
 
 Field::~Field() {
-	// TODO Auto-generated destructor stub
+	Superhero** arr = superheroesIdTree.getSortedArray();
+	for (int i=0; i<superheroesIdTree.GetSize();i++)
+		delete arr[i];
+	delete[] arr;
 }
 
 void Field::AddSuperhero(int superhero, int strength) {
@@ -223,6 +230,9 @@ Superhero* Field::updateStrengthTree(int teamID, int factor) {
 
 	this->superheroesPowerTree.LoadSortedArray(updatedKeys, updatedSuperheroes,
 			length);
+
+	delete[] updatedKeys;
+	delete[] updatedSuperheroes;
 
 	return strongest;
 }
