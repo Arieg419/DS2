@@ -23,6 +23,7 @@ private:
 	int minID = 0;
 	int maxID = 0;
 	bool hasBeenInit = false;
+	int fieldSize=0;
 
 	Superhero* updateStrengthTree(int teamID, int factor);
 public:

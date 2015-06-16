@@ -7,6 +7,7 @@
 #include <iostream>
 #include "library2.h"
 #include "Objects/Field.h"
+#include "Exceptions/FieldExceptions.h"
 
 void* Init(int n) {
 	Field* field = new Field(n);
@@ -14,42 +15,111 @@ void* Init(int n) {
 }
 
 StatusType AddSuperhero(void* DS, int superheroID, int strength) {
-	((Field*) DS)->AddSuperhero(superheroID, strength);
-	// TODO: Exceptions
+	if (!DS)
+		return INVALID_INPUT;
+	try {
+		((Field*) DS)->AddSuperhero(superheroID, strength);
+	} catch (FieldInvalidInput& e) {
+		return INVALID_INPUT;
+	} catch (FieldFailure& e) {
+		return FAILURE;
+	} catch (std::bad_alloc& err) {
+		return ALLOCATION_ERROR;
+	}
 	return SUCCESS;
 }
 
 StatusType AssignSuperhero(void* DS, int superheroID, int team) {
-	((Field*) DS)->AssignSuperhero(superheroID, team);
+	if (!DS)
+		return INVALID_INPUT;
+	try {
+		((Field*) DS)->AssignSuperhero(superheroID, team);
+	} catch (FieldInvalidInput& e) {
+		return INVALID_INPUT;
+	} catch (FieldFailure& e) {
+		return FAILURE;
+	} catch (std::bad_alloc& err) {
+		return ALLOCATION_ERROR;
+	}
 	return SUCCESS;
 }
 
 StatusType JoinDepartments(void* DS, int team1, int team2) {
-	((Field*) DS)->JoinDepartments(team1, team2);
+	if (!DS)
+		return INVALID_INPUT;
+	try {
+		((Field*) DS)->JoinDepartments(team1, team2);
+	} catch (FieldInvalidInput& e) {
+		return INVALID_INPUT;
+	} catch (FieldFailure& e) {
+		return FAILURE;
+	} catch (std::bad_alloc& err) {
+		return ALLOCATION_ERROR;
+	}
 	return SUCCESS;
 }
 
 StatusType GetDepartment(void* DS, int superheroID, int* department) {
-	*department = ((Field*) DS)->GetDepartment(superheroID);
+	if (!DS || department==NULL)
+		return INVALID_INPUT;
+	try {
+		*department = ((Field*) DS)->GetDepartment(superheroID);
+	} catch (FieldInvalidInput& e) {
+		return INVALID_INPUT;
+	} catch (FieldFailure& e) {
+		return FAILURE;
+	} catch (std::bad_alloc& err) {
+		return ALLOCATION_ERROR;
+	}
 	return SUCCESS;
 }
 
 StatusType TeamUpgrade(void* DS, int teamID, int factor) {
-	((Field*) DS)->TeamUpgrade(teamID, factor);
+	if (!DS)
+		return INVALID_INPUT;
+	try {
+		((Field*) DS)->TeamUpgrade(teamID, factor);
+	} catch (FieldInvalidInput& e) {
+		return INVALID_INPUT;
+	} catch (FieldFailure& e) {
+		return FAILURE;
+	} catch (std::bad_alloc& err) {
+		return ALLOCATION_ERROR;
+	}
 	return SUCCESS;
 }
 
 StatusType GetStrongestSuperhero(void* DS, int depID, int* superhero) {
-	*superhero = ((Field*) DS)->GetStrongestSuperhero(depID)->getId();
+	if (!DS || superhero==NULL)
+		return INVALID_INPUT;
+	try {
+		*superhero = ((Field*) DS)->GetStrongestSuperhero(depID)->getId();
+	} catch (FieldInvalidInput& e) {
+		return INVALID_INPUT;
+	} catch (FieldFailure& e) {
+		return FAILURE;
+	} catch (std::bad_alloc& err) {
+		return ALLOCATION_ERROR;
+	}
 	return SUCCESS;
 }
 
 StatusType GetNumOfSuperherosInRange(void* DS, int min, int max, int* num) {
-	*num = ((Field*) DS)->GetNumOfSuperherosInRange(min, max);
+	if (!DS || num==NULL)
+		return INVALID_INPUT;
+	try {
+		*num = ((Field*) DS)->GetNumOfSuperherosInRange(min, max);
+	} catch (FieldInvalidInput& e) {
+		return INVALID_INPUT;
+	} catch (FieldFailure& e) {
+		return FAILURE;
+	} catch (std::bad_alloc& err) {
+		return ALLOCATION_ERROR;
+	}
 	return SUCCESS;
 }
 
 void Quit(void** DS) {
-	delete ((Field*)*DS);
+	delete ((Field*) *DS);
 	*DS = NULL;
 }

@@ -50,6 +50,7 @@ private:
 	void updateHeights(Node* node);
 	void updateRanks(Node* node);
 	void updateSmallest();
+	void setAllRanks(Node* subroot);
 	void balance(Node* node);
 	void llRotation(Node* node);
 	void rrRotation(Node* node);
@@ -115,8 +116,11 @@ int AVLRankTree<K, T>::getInRange(K min, K max) {
 
 	if (max <= min)
 		throw IllegalInput();
-	int range = findMyBitches(max) - findMyBitches(min);
-	if (DoesExist(min)) range++;
+	int smallerThenMax = findMyBitches(max);
+	int smallerThenMin = findMyBitches(min);
+	int range = smallerThenMax - smallerThenMin;
+	if (DoesExist(min))
+		range++;
 	return range;
 	// TODO count edges
 
@@ -188,6 +192,8 @@ void AVLRankTree<K, T>::LoadSortedArray(K* sortedKeysArray, T* sortedDataArray,
 	Reset();
 	root = LoadSortedArray2(sortedKeysArray, sortedDataArray, length, NULL);
 	updateSmallest();
+	setAllRanks(root);
+
 	this->size = length;
 	return;
 }
@@ -420,6 +426,24 @@ void AVLRankTree<K, T>::updateSmallest() {
 		current = current->left;
 	}
 	this->smallest = current;
+}
+
+//running post order and setting the ranks of the entire tree
+template<class K, class T>
+void AVLRankTree<K, T>::setAllRanks(Node* subroot) {
+	if (!subroot)
+		return; // empty tree , only if root==null
+	int leftRank = 0;
+	int rightRank = 0;
+	if (subroot->left) {
+		setAllRanks(subroot->left);
+		leftRank = subroot->left->rank;
+	}
+	if (subroot->right) {
+		setAllRanks(subroot->right);
+		rightRank = subroot->right->rank;
+	}
+	subroot->rank = leftRank + rightRank + 1;
 }
 
 template<class K, class T>

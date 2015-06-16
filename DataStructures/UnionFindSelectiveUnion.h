@@ -44,8 +44,8 @@ UnionFindSelectiveUnion<T>::~UnionFindSelectiveUnion(){
 
 template<class T>
 void UnionFindSelectiveUnion<T>::Union(int i, int j){
-	UnionFind<T>::Union(i,j);
-	if (UnionFind<T>::Find(i)==i)
+	UnionFind<T>::Union(Real2Fake[i],Real2Fake[j]);
+	if (UnionFind<T>::Find(Real2Fake[i])==Real2Fake[i]) //TODO think about it
 		return;
 	swap(Real2Fake+i,Real2Fake+j);
 	swap(Fake2Real+i,Fake2Real+j);

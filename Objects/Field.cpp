@@ -6,10 +6,11 @@
  */
 
 #include "Field.h"
+#include "../Exceptions/FieldExceptions.h"
 
 Field::Field(int n) :
 		groupsDepartments(n, NULL) {
-
+	fieldSize = n;
 }
 
 Field::~Field() {
@@ -17,6 +18,11 @@ Field::~Field() {
 }
 
 void Field::AddSuperhero(int superhero, int strength) {
+	if (superhero < 0 || strength < 0)
+		throw FieldInvalidInput();
+	if (superheroesIdTree.DoesExist(superhero))
+		throw FieldFailure();
+
 	if (!hasBeenInit) {
 		minID = superhero;
 		maxID = superhero;
@@ -36,12 +42,22 @@ void Field::AddSuperhero(int superhero, int strength) {
 }
 
 void Field::AssignSuperhero(int superheroID, int team) {
+	if (team < 0 || team >= fieldSize)
+		throw FieldInvalidInput();
+	if (!superheroesIdTree.DoesExist(superheroID)
+			|| superheroesIdTree.getByKey(superheroID)->getGroup() != -1)
+		throw FieldFailure();
+
 	Superhero *superhero = superheroesIdTree.getByKey(superheroID);
 	superhero->setGroup(team);
 	this->superheroesHashTable.Insert(superheroID, superhero);
 	// update strongest
 	int department = groupsDepartments.Find(team);
 	Superhero* old_strongest = groupsDepartments.GetData(department);
+	if (!old_strongest) {
+		groupsDepartments.SetData(department, superhero);
+		return;
+	}
 	if (superhero->getStrength() > old_strongest->getStrength()) {
 		groupsDepartments.SetData(department, superhero);
 	} else if (superhero->getStrength() == old_strongest->getStrength()) {
@@ -51,27 +67,58 @@ void Field::AssignSuperhero(int superheroID, int team) {
 }
 
 void Field::JoinDepartments(int team1, int team2) {
-	Superhero* strongest1 = groupsDepartments.GetData(team1);
-	Superhero* strongest2 = groupsDepartments.GetData(team2);
+	if (team1 < 0 || team1 >= fieldSize || team2 < 0 || team2 >= fieldSize)
+		throw FieldInvalidInput();
 
-	groupsDepartments.Union(team1, team2);
-	// TODO: Make "team1" the name of the deparment. unless it will happen, the following part will fail!
-	// READ the upper row !!!!!!!!!!!!!!!!!!!!!
-	groupsDepartments.SetData(team1, strongest1);
+	int dep1 = groupsDepartments.Find(team1);
+	int dep2 = groupsDepartments.Find(team2);
+
+	if (dep1 == dep2)
+		throw FieldFailure();
+
+	Superhero* strongest1 = groupsDepartments.GetData(dep1);
+	Superhero* strongest2 = groupsDepartments.GetData(dep2);
+
+	groupsDepartments.Union(dep1, dep2);
+
+	if (!strongest1 && !strongest2) // both dep doesn't have superheroes
+		return;
+	if (!strongest1) { // dep1 doesn't have superhero
+		groupsDepartments.SetData(dep1, strongest2);
+		return;
+	}
+	if (!strongest2) {// dep2 doesn't have superhero
+		groupsDepartments.SetData(dep1, strongest1);
+		return;
+	}
+
 	if (strongest2->getStrength() > strongest1->getStrength()) {
-		groupsDepartments.SetData(team1, strongest2);
+		groupsDepartments.SetData(dep1, strongest2);
 	} else if (strongest1->getStrength() == strongest2->getStrength()) {
 		if (strongest2->getId() < strongest1->getId())
-			groupsDepartments.SetData(team1, strongest2);
+			groupsDepartments.SetData(dep1, strongest2);
 	}
 }
 
 int Field::GetDepartment(int superheroID) {
-	Superhero *retVal = superheroesIdTree.getByKey(superheroID);
+	Superhero* retVal;
+	if (superheroID < 0)
+		throw FieldInvalidInput();
+	try {
+		retVal = superheroesIdTree.getByKey(superheroID);
+	} catch (KeyDoesNotExist& err) {
+		throw FieldFailure();
+	}
+	if (retVal && retVal->getGroup() == -1)
+		throw FieldFailure();
+
 	return groupsDepartments.Find(retVal->getGroup());
 }
 
 void Field::TeamUpgrade(int teamID, int factor) {
+	if (factor < 1 || teamID < 0 || teamID >= fieldSize)
+		throw FieldInvalidInput();
+
 	Superhero* strongest1 = updateStrengthTree(teamID, factor); // update StrengthTree
 	if (strongest1 == NULL) // Tree is empty
 		return;
@@ -88,23 +135,22 @@ void Field::TeamUpgrade(int teamID, int factor) {
 }
 
 Superhero* Field::GetStrongestSuperhero(int depID) {
-	return groupsDepartments.GetData(depID);
+	if (depID < 0 || depID >= fieldSize)
+		throw FieldInvalidInput();
+	if (groupsDepartments.Find(depID) != depID)
+		throw FieldFailure();
+	Superhero* result = groupsDepartments.GetData(depID);
+	if (!result)
+		throw FieldFailure();
+	return result;
 }
 
 int Field::GetNumOfSuperherosInRange(int min, int max) {
-	//function accesses getRange method of AVL Ranked Tree
-	//so we need to grab that DS(Obejct)
-	//Algorithm ############
-	//1. Get superheroesPower Tree. All heroes sorted in an AVL tree based on strength.
-	//2. Node rank is all of nodes children including itself.
-	//3. Get superhero with value equal to or closest to Minimum power level.
-	//4. Traverse the tree until you reach a superhero with the max interval val
-	//5. Get the height from the min node the max node.
-	//6. Deduct the nodes that are left to the minimum, look at his left childs ranks and subtract.
-	//Superhero* minSuperHero = this->superheroesPowerTree.getByKey(min);
-	//Superhero* maxSuperHero = this->superheroesPowerTree.getByKey(max);
-	//int diffInHeight = minSuperHero
-	return superheroesPowerTree.getInRange(PairID(min,minID-1),PairID(max,maxID+1));
+	if (min < 0 || min >= max)
+		throw FieldInvalidInput();
+
+	return superheroesPowerTree.getInRange(PairID(min, minID - 1),
+			PairID(max, maxID + 1));
 }
 
 /****************************** Private ***************************/

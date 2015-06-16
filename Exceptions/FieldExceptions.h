@@ -12,5 +12,18 @@
 #include <exception>
 using namespace std;
 
+class FieldInvalidInput:public exception {
+public:
+	const char* what() {
+		return "\n";
+	}
+};
+
+class FieldFailure:public exception {
+public:
+	const char* what() {
+		return "\n";
+	}
+};
 
 #endif /* EXCEPTIONS_FIELDEXCEPTIONS_H_ */
