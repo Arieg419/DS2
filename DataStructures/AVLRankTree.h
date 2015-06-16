@@ -65,7 +65,7 @@ private:
 	Node* LoadSortedArray2(K* sortedKeysArray, T* sortedArray, int length,
 			Node* parent);
 	Node* findClosestParentOf(K key);
-	int findMyBitches(K key);
+	int findLeftest(K key);
 public:
 	AVLRankTree();
 	virtual ~AVLRankTree();
@@ -116,8 +116,8 @@ int AVLRankTree<K, T>::getInRange(K min, K max) {
 
 	if (max <= min)
 		throw IllegalInput();
-	int smallerThenMax = findMyBitches(max);
-	int smallerThenMin = findMyBitches(min);
+	int smallerThenMax = findLeftest(max);
+	int smallerThenMin = findLeftest(min);
 	int range = smallerThenMax - smallerThenMin;
 	if (DoesExist(min))
 		range++;
@@ -635,7 +635,7 @@ typename AVLRankTree<K, T>::Node* AVLRankTree<K, T>::LoadSortedArray2(
 }
 
 template<class K, class T>
-int AVLRankTree<K, T>::findMyBitches(K key) {
+int AVLRankTree<K, T>::findLeftest(K key) {
 	int smallerNodes = 0;
 	Node* current = this->findClosestParentOf(key);
 	if (current == NULL) {
