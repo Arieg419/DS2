@@ -16,6 +16,7 @@ private:
 	int* parents; // Main array that represent the items.
 	int* size; // used to determine which set to merge into the other(during union)
 	T* data; // hold items data.
+protected:
 	int max_size;
 public:
 	UnionFind(int n, T defaultData);
@@ -51,13 +52,13 @@ UnionFind<T>::~UnionFind() {
 }
 
 template<class T>
-void UnionFind<T>::Union(int i, int j) {
+void UnionFind<T>::Union(int a, int b) {
 	int bigger, smaller;
 	// check if legal set
-	if (i < 0 || i >= max_size || j < 0 || j >= max_size)
+	if (a < 0 || a >= max_size || b < 0 || b >= max_size)
 		throw SetDoesNotExist();
-	if (this->parents[i] != -1 || this->parents[j] != -1)
-		throw SetDoesNotExist();
+	int i = Find(a);
+	int j = Find(b);
 	// find the bigger&smaller set
 	bigger = (this->size[i] > this->size[j]) ? i : j;
 	smaller = (i == bigger) ? j : i;
@@ -67,7 +68,7 @@ void UnionFind<T>::Union(int i, int j) {
 	this->size[bigger] += this->size[smaller];
 
 	// make sure i is the name of the department
-	if (bigger==i)
+	if (bigger == i)
 		return;
 }
 
@@ -82,15 +83,15 @@ int UnionFind<T>::Find(int i) {
 	current = i;
 	while (this->parents[current] != -1)
 		current = this->parents[current];
-	int root=current;
+	int root = current;
 
 	// shrink trails
 	current = i;
-		while (this->parents[current] != -1){
-			int next = this->parents[current];
-			this->parents[current]=root;
-			current = next;
-		}
+	while (this->parents[current] != -1) {
+		int next = this->parents[current];
+		this->parents[current] = root;
+		current = next;
+	}
 
 	return root;
 }
@@ -132,7 +133,8 @@ void UnionFind<T>::Print() {
 			}
 
 		}
-		if (printed) cout << endl;
+		if (printed)
+			cout << endl;
 	}
 }
 

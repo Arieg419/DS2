@@ -26,4 +26,11 @@ public:
 	}
 };
 
+class UnionFailure:public exception {
+public:
+	const char* what() {
+		return "\n";
+	}
+};
+
 #endif /* EXCEPTIONS_UNIONEXCEPTIONS_H_ */

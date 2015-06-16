@@ -42,11 +42,22 @@ void Field::AddSuperhero(int superhero, int strength) {
 }
 
 void Field::AssignSuperhero(int superheroID, int team) {
+	if (superheroID==60 && team==19){ // TODO: remove(debugging)
+		int tmp = 5;
+		tmp++;
+	}
 	if (team < 0 || team >= fieldSize)
 		throw FieldInvalidInput();
-	if (!superheroesIdTree.DoesExist(superheroID)
-			|| superheroesIdTree.getByKey(superheroID)->getGroup() != -1)
+	if (!superheroesIdTree.DoesExist(superheroID))
 		throw FieldFailure();
+	int group = superheroesIdTree.getByKey(superheroID)->getGroup();
+	if (group != -1){
+		if (group==team){
+			return;
+		}else{
+			throw FieldFailure();
+		}
+	}
 
 	Superhero *superhero = superheroesIdTree.getByKey(superheroID);
 	superhero->setGroup(team);
@@ -87,7 +98,7 @@ void Field::JoinDepartments(int team1, int team2) {
 		groupsDepartments.SetData(dep1, strongest2);
 		return;
 	}
-	if (!strongest2) {// dep2 doesn't have superhero
+	if (!strongest2) { // dep2 doesn't have superhero
 		groupsDepartments.SetData(dep1, strongest1);
 		return;
 	}
@@ -149,8 +160,8 @@ int Field::GetNumOfSuperherosInRange(int min, int max) {
 	if (min < 0 || min >= max)
 		throw FieldInvalidInput();
 
-	return superheroesPowerTree.getInRange(PairID(min, minID - 1),
-			PairID(max, maxID + 1));
+	return superheroesPowerTree.getInRange(PairID(min, maxID + 99),
+			PairID(max, maxID + 99));
 }
 
 /****************************** Private ***************************/

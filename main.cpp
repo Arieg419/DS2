@@ -10,6 +10,7 @@
 #include "DataStructures/UnionFind.h"
 #include "DataStructures/HashTable.h"
 #include "DataStructures/UnionFindSelectiveUnion.h"
+#include "Exceptions/UNIONExceptions.h"
 
 //#include "Objects/Fruit.h"
 using namespace std;
@@ -17,16 +18,19 @@ using namespace std;
 void TreeInterface();
 void UnionInterface();
 void HashTableInterface();
+
 /*
 int main(int argc, const char** argv) {
 	TreeInterface();
 	return 0;
 }
 */
+
 void TreeInterface() {
 	cout << "Good morning Sir. You may create your AVLRankTree now." << endl;
 	cout << "######################################################" << endl;
-	int choice, item, ID, *arr, min, max;;
+	int choice, item, ID, *arr, min, max;
+	;
 
 	AVLRankTree<int, int> avl;
 	while (1) {
@@ -77,7 +81,7 @@ void TreeInterface() {
 			cout << "Enter max: ";
 			cin >> max;
 			cout << "Amout of elements in range: ";
-			cout << avl.getInRange(min,max) << endl;
+			cout << avl.getInRange(min, max) << endl;
 			break;
 		case 9:
 			exit(0);
@@ -107,8 +111,9 @@ void UnionInterface() {
 		cout << "\t\t2. Find" << endl;
 		cout << "3. Set set data";
 		cout << "\t\t4. Get set data" << endl;
-		cout << "5. Print";
-		cout << "\t\t9. Exit" << endl << endl;
+		cout << "5. PrintFake";
+		cout << "\t\t6. PrintReal" << endl;
+		cout << "9. Exit" << endl << endl;
 		cout << "Enter your Choice: ";
 		cin >> choice;
 		switch (choice) {
@@ -117,7 +122,11 @@ void UnionInterface() {
 			cin >> id1;
 			cout << "Enter Set2 id: ";
 			cin >> id2;
-			uf.Union(id1, id2);
+			try {
+				uf.Union(id1, id2);
+			} catch (UnionFailure& e) {
+				cout << "already together" << endl;
+			}
 			break;
 		case 2:
 			cout << "Set index: ";
@@ -138,8 +147,12 @@ void UnionInterface() {
 			cout << uf.GetData(id1) << endl;
 			break;
 		case 5:
-			cout << "The current state of the datastructures is: " << endl;
+			cout << "The current fake state of the datastructures is: " << endl;
 			uf.Print();
+			break;
+		case 6:
+			cout << "The current real state of the datastructures is: " << endl;
+			uf.PrintReal();
 			break;
 		case 9:
 			exit(0);

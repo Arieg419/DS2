@@ -9,12 +9,14 @@
 #define DATASTRUCTURES_UNIONFINDSELECTIVEUNION_H_
 
 #include "UnionFind.h"
+#include "InjectiveDictionary.h"
 
 template<class T>
-class UnionFindSelectiveUnion : public UnionFind<T> {
+class UnionFindSelectiveUnion: public UnionFind<T> {
 private:
-	int* Real2Fake;
-	int* Fake2Real;
+//	int* Real2Fake;
+//	int* Fake2Real;
+	InjectiveDictionary dict; // key is the set, and data is the item
 
 public:
 	UnionFindSelectiveUnion(int n, T defaultData);
@@ -23,54 +25,69 @@ public:
 	int Find(int i);
 	void SetData(int i, T data);
 	T GetData(int i);
-	void swap(int* num1, int* num2);
+	void PrintReal();
 };
 
 template<class T>
-UnionFindSelectiveUnion<T>::UnionFindSelectiveUnion(int n, T defaultData) : UnionFind<T>(n, defaultData){
-	Fake2Real = new int[n];
+UnionFindSelectiveUnion<T>::UnionFindSelectiveUnion(int n, T defaultData) :
+		UnionFind<T>(n, defaultData), dict(n) {
+	/*Fake2Real = new int[n];
 	Real2Fake = new int[n];
-	for (int i=0; i<n; i++){
-		Real2Fake[i]=i;
-		Fake2Real[i]=i;
+	for (int i = 0; i < n; i++) {
+		Real2Fake[i] = i;
+		Fake2Real[i] = i;
+	}*/
+}
+
+template<class T>
+UnionFindSelectiveUnion<T>::~UnionFindSelectiveUnion() {
+	/*delete[] Real2Fake;
+	delete[] Fake2Real;*/
+}
+
+template<class T>
+void UnionFindSelectiveUnion<T>::Union(int item1, int item2) {
+	dict.remove(Find(item1));
+	dict.remove(Find(item2));
+	UnionFind<T>::Union(item1, item2);
+	dict.set(item1,UnionFind<T>::Find(item1));
+}
+
+template<class T>
+int UnionFindSelectiveUnion<T>::Find(int item) {
+	int main_item = UnionFind<T>::Find(item);
+	return dict.getKey(main_item);
+}
+
+template<class T>
+void UnionFindSelectiveUnion<T>::SetData(int set, T data) {
+	UnionFind<T>::SetData(dict.getData(set), data);
+}
+
+template<class T>
+T UnionFindSelectiveUnion<T>::GetData(int set) {
+	return UnionFind<T>::GetData(dict.getData(set));
+}
+
+template<class T>
+void UnionFindSelectiveUnion<T>::PrintReal() {
+	cout << endl << "##############" << endl << Find(20) << endl << "##############" << endl;
+	// for debugging pupose only. shitty complexity!
+	for (int i = 0; i < this->max_size; i++) {
+		bool printed = false;
+		for (int j = 0; j < this->max_size; j++) {
+			if (Find(j) == i) {
+				if (!printed) {
+					cout << "set " << i << ": ";
+					printed = true;
+				}
+				cout << j << "  ";
+			}
+
+		}
+		if (printed)
+			cout << endl;
 	}
-}
-
-template<class T>
-UnionFindSelectiveUnion<T>::~UnionFindSelectiveUnion(){
-	delete[] Real2Fake;
-	delete[] Fake2Real;
-}
-
-template<class T>
-void UnionFindSelectiveUnion<T>::Union(int i, int j){
-	UnionFind<T>::Union(Real2Fake[i],Real2Fake[j]);
-	if (UnionFind<T>::Find(Real2Fake[i])==Real2Fake[i]) //TODO think about it
-		return;
-	swap(Real2Fake+i,Real2Fake+j);
-	swap(Fake2Real+i,Fake2Real+j);
-}
-
-template<class T>
-int UnionFindSelectiveUnion<T>::Find(int i){
-	int result = UnionFind<T>::Find(Real2Fake[i]);
-	return Fake2Real[result];
-}
-
-template<class T>
-void UnionFindSelectiveUnion<T>::SetData(int i, T data){
-	UnionFind<T>::SetData(Real2Fake[i],data);
-}
-
-template<class T>
-T UnionFindSelectiveUnion<T>::GetData(int i){
-	return UnionFind<T>::GetData(Real2Fake[i]);
-}
-template<class T>
-void UnionFindSelectiveUnion<T>::swap(int* num1,int* num2){
-	int tmp = *num1;
-	*num1 = *num2;
-	*num2 = tmp;
 }
 
 #endif /* DATASTRUCTURES_UNIONFINDSELECTIVEUNION_H_ */
