@@ -42,19 +42,15 @@ void Field::AddSuperhero(int superhero, int strength) {
 }
 
 void Field::AssignSuperhero(int superheroID, int team) {
-	if (superheroID==60 && team==19){ // TODO: remove(debugging)
-		int tmp = 5;
-		tmp++;
-	}
 	if (team < 0 || team >= fieldSize)
 		throw FieldInvalidInput();
 	if (!superheroesIdTree.DoesExist(superheroID))
 		throw FieldFailure();
 	int group = superheroesIdTree.getByKey(superheroID)->getGroup();
-	if (group != -1){
-		if (group==team){
+	if (group != -1) {
+		if (group == team) {
 			return;
-		}else{
+		} else {
 			throw FieldFailure();
 		}
 	}
@@ -146,6 +142,13 @@ void Field::TeamUpgrade(int teamID, int factor) {
 }
 
 Superhero* Field::GetStrongestSuperhero(int depID) {
+	//################### TODO remove(debugging)
+	if (depID == 23) {
+		int groupa = superheroesIdTree.getByKey(1917)->getGroup();
+		int depa = groupsDepartments.Find(groupa);
+		depa++;
+	}
+//###################
 	if (depID < 0 || depID >= fieldSize)
 		throw FieldInvalidInput();
 	if (groupsDepartments.Find(depID) != depID)
@@ -172,11 +175,11 @@ Superhero* Field::updateStrengthTree(int teamID, int factor) {
 		return NULL;
 	Superhero** superheroes = this->superheroesPowerTree.getSortedArray();
 
-	// results arrays
+// results arrays
 	Superhero** updatedSuperheroes = new Superhero*[length];
 	PairID* updatedKeys = new PairID[length];
 
-	// fill updated superheroes using 2 pointers of fruits, and update fruits.
+// fill updated superheroes using 2 pointers of fruits, and update fruits.
 	int p1 = 0, p2 = 0, p3 = 0; // p1: in team, p2: not in team, p3: new array
 	while (p1 < length && superheroes[p1]->getGroup() != teamID)
 		p1++; // set to first attack
@@ -186,7 +189,7 @@ Superhero* Field::updateStrengthTree(int teamID, int factor) {
 	if (p1 < length)
 		superheroes[p1]->setStrength(superheroes[p1]->getStrength() * factor);
 
-	// every iteration moving one fruit
+// every iteration moving one fruit
 	while (p3 < length) {
 		bool copyP1;
 		if (p1 == length) { // remain only safe fruits
@@ -220,7 +223,7 @@ Superhero* Field::updateStrengthTree(int teamID, int factor) {
 	delete[] (superheroes);
 	this->superheroesPowerTree.Reset();
 
-	// converting array to a tree
+// converting array to a tree
 	for (int i = 0; i < length; i++)
 		updatedKeys[i] = updatedSuperheroes[i]->getStrengthID();
 
